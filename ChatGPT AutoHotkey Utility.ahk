@@ -157,7 +157,6 @@ Close(*) {
     HTTP_Request.Abort
     Response_Window.Hide
     global Response_Window_Status := "Closed"
-    Exit
 }
 
 /*

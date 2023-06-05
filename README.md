@@ -12,7 +12,7 @@ An AutoHotkey script that uses the ChatGPT API to process selected text.
 3. Open `ChatGPT AutoHotkey Utility.ahk` using your favorite text editor
 4. Paste your OpenAI API key on the `API_Key` variable
 
-![image](https://github.com/kdalanon/ChatGPT-AutoHotkey-Utility/assets/123705491/81c5a079-f4e3-45ff-958d-38924700594c)
+![image](https://github.com/kdalanon/ChatGPT-AutoHotkey-Utility/assets/123705491/f66a888e-3550-48e9-a0e8-397736df02b3)
 
 5. Launch `ChatGPT AutoHotkey Utility.ahk`
 6. Highlight a text that you want to process using ChatGPT API and press the `back quote` key to bring up the menu

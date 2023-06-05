@@ -45,7 +45,7 @@ You can add a prompt using this code:
 
 ```AutoHotkey
 Function_To_Execute_When_Selected(*) {
-    ChatGPT_Prompt := "Your prompt here: `n`n"
+    ChatGPT_Prompt := "Your prompt here:"
     Status_Message := "Status message that will show while processing the request"
     ProcessRequest(ChatGPT_Prompt, Status_Message, Retry_Status)
 }

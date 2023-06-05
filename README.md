@@ -56,3 +56,8 @@ Function_To_Execute_When_Selected(*) {
 You can change the activation hotkey under Hotkey. See [here](https://www.autohotkey.com/docs/v2/Hotkeys.htm#Symbols) for the list of possible hotkeys.
 
 ![image](https://github.com/kdalanon/ChatGPT-AutoHotkey-Utility/assets/123705491/1c3c209c-18fd-4a5d-a523-c5da7bf6904b)
+
+## Credits
+
+- [AutoHotkey-JSON](https://github.com/cocobelgica/AutoHotkey-JSON) library
+- [ai-tools-ahk](https://github.com/ecornell/ai-tools-ahk) for the inspiration

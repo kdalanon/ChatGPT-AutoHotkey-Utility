@@ -9,6 +9,7 @@ Script Tray Menu
 ====================================================
 */
 
+TraySetIcon("Icon.ico")
 A_TrayMenu.Delete
 A_TrayMenu.Add("&Debug", Debug)
 A_TrayMenu.Add("&Reload Script", ReloadScript)
@@ -268,4 +269,4 @@ Hotkey
 ====================================================
 */
 
-^::MenuPopup.Show()
+`::MenuPopup.Show()

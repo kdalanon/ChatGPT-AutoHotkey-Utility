@@ -66,3 +66,4 @@ You can change the activation hotkey under Hotkey. See [here](https://www.autoho
 
 - [AutoHotkey-JSON](https://github.com/cocobelgica/AutoHotkey-JSON) library
 - [ai-tools-ahk](https://github.com/ecornell/ai-tools-ahk) for the inspiration
+- [Icons8](https://icons8.com/icon/kTuxVYRKeKEY/chatgpt) for the icon

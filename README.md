@@ -1,4 +1,7 @@
 # ChatGPT-AutoHotkey-Utility
+
+## [Download here](https://github.com/kdalanon/ChatGPT-AutoHotkey-Utility/releases/latest)
+
 An AutoHotkey script that uses the ChatGPT API to process selected text.
 
 ![image](https://github.com/kdalanon/ChatGPT-AutoHotkey-Utility/assets/123705491/d8387e7f-48b6-4e2e-892a-b79bf5c7f4fe)

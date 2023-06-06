@@ -19,6 +19,8 @@ An AutoHotkey script that uses the ChatGPT API to process selected text.
 
 ![image](https://github.com/kdalanon/ChatGPT-AutoHotkey-Utility/assets/123705491/7615e7b5-c4f0-4a8f-9608-669a021ac38d)
 
+(Image from [emacs.stackexchange.com](https://emacs.stackexchange.com/questions/16749/how-to-set-emacs-to-recognize-backtick-and-tilde-with-a-colemak-keyboard-layout))
+
 ## Customizing menu, prompts, and hotkey
 
 You can customize prompts and the menu order by doing the following:

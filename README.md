@@ -60,7 +60,7 @@ Function_To_Execute_When_Selected(*) {
 
 You can change the activation hotkey under Hotkey. See [here](https://www.autohotkey.com/docs/v2/KeyList.htm) for the list of possible hotkeys.
 
-![image](https://github.com/kdalanon/ChatGPT-AutoHotkey-Utility/assets/123705491/4b7e3bdf-395b-4d42-8c17-1b0e6717a94b)
+![image](https://github.com/kdalanon/ChatGPT-AutoHotkey-Utility/assets/123705491/da257ab3-05d0-4779-87a2-0a2ba6270255)
 
 ## Credits
 

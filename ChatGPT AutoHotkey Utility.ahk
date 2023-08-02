@@ -209,7 +209,10 @@ ProcessRequest(ChatGPT_Prompt, Status_Message, Retry_Status) {
     HTTP_Request.WaitForResponse
     try {
         if (HTTP_Request.status == 200) {
-            JSON_Response := HTTP_Request.responseText
+            SafeArray := HTTP_Request.responseBody
+	    pData := NumGet(ComObjValue(SafeArray) + 8 + A_PtrSize, 'Ptr')
+	    length := SafeArray.MaxIndex() + 1
+	    JSON_Response := StrGet(pData, length, 'UTF-8')
             var := Jxon_Load(&JSON_Response)
             JSON_Response := var.Get("choices")[1].Get("message").Get("content")
             RetryButton.Enabled := 1

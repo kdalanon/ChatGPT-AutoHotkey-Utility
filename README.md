@@ -52,7 +52,8 @@ You can add a prompt using this code:
 Function_To_Execute_When_Selected(*) {
     ChatGPT_Prompt := "Your prompt here:"
     Status_Message := "Status message that will show while processing the request"
-    ProcessRequest(ChatGPT_Prompt, Status_Message, Retry_Status)
+    API_Model := "gpt-4" ; or API_Model := "gpt-3.5-turbo"
+    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
 }
 ```
 

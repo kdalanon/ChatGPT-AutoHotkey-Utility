@@ -15,7 +15,7 @@ An AutoHotkey script that uses the ChatGPT API to process selected text.
 3. Open `ChatGPT AutoHotkey Utility.ahk` using your favorite text editor
 4. Paste your OpenAI API key on the `API_Key` variable
 
-![image](https://github.com/kdalanon/ChatGPT-AutoHotkey-Utility/assets/123705491/f66a888e-3550-48e9-a0e8-397736df02b3)
+![image](https://github.com/kdalanon/ChatGPT-AutoHotkey-Utility/assets/123705491/a77d1a7d-628b-4155-83ba-2b5569442a50)
 
 5. Launch `ChatGPT AutoHotkey Utility.ahk`
 6. Highlight a text that you want to process using ChatGPT API and press the `back quote` key to bring up the menu
@@ -24,7 +24,7 @@ An AutoHotkey script that uses the ChatGPT API to process selected text.
 
 (Image from [emacs.stackexchange.com](https://emacs.stackexchange.com/questions/16749/how-to-set-emacs-to-recognize-backtick-and-tilde-with-a-colemak-keyboard-layout))
 
-## Customizing menu, prompts, and hotkey
+## Customizing menu, prompts, APIs, and hotkey
 
 You can customize prompts and the menu order by doing the following:
 
@@ -55,6 +55,12 @@ Function_To_Execute_When_Selected(*) {
     ProcessRequest(ChatGPT_Prompt, Status_Message, Retry_Status)
 }
 ```
+
+### APIs
+
+You can edit the APIs used for each prompt by changing the `API_Model` under each prompt.
+
+![76IxQa4](https://github.com/kdalanon/ChatGPT-AutoHotkey-Utility/assets/123705491/7bd23815-78d8-4629-b69b-7fcea3be5f28)
 
 ### Hotkey
 

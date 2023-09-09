@@ -49,7 +49,6 @@ Variables
 
 API_Key := "Your_API_Key_Here"
 API_URL := "https://api.openai.com/v1/chat/completions"
-API_Model := "gpt-3.5-turbo"
 Status_Message := ""
 Response_Window_Status := "Closed"
 Retry_Status := ""
@@ -73,43 +72,50 @@ MenuPopup.Add("&7 - Translate to English", TranslateToEnglish)
 Rephrase(*) {
     ChatGPT_Prompt := "Rephrase the following text or paragraph to ensure clarity, conciseness, and a natural flow. The revision should preserve the tone, style, and formatting of the original text. Additionally, correct any grammar and spelling errors you come across:"
     Status_Message := "Rephrasing..."
-    ProcessRequest(ChatGPT_Prompt, Status_Message, Retry_Status)
+    API_Model := "gpt-4"
+    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
 Summarize(*) {
     ChatGPT_Prompt := "Summarize the following:"
     Status_Message := "Summarizing..."
-    ProcessRequest(ChatGPT_Prompt, Status_Message, Retry_Status)
+    API_Model := "gpt-4"
+    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
 Explain(*) {
     ChatGPT_Prompt := "Explain the following:"
     Status_Message := "Explaining..."
-    ProcessRequest(ChatGPT_Prompt, Status_Message, Retry_Status)
+    API_Model := "gpt-3.5-turbo"
+    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
 Expand(*) {
     ChatGPT_Prompt := "Considering the original tone, style, and formatting, please help me express the following idea in a clearer and more articulate way. The style of the message could be formal, informal, casual, empathetic, assertive, or persuasive, depending on the context of the original message. The text should be divided into paragraphs for readability. No specific language complexities need to be avoided and the focus should be equally distributed throughout the message. There's no set minimum or maximum length. Here's what I'm trying to say:"
     Status_Message := "Expanding..."
-    ProcessRequest(ChatGPT_Prompt, Status_Message, Retry_Status)
+    API_Model := "gpt-4"
+    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
 GenerateReply(*) {
     ChatGPT_Prompt := "Craft a response to any given message. The response should adhere to the original sender's tone, style, formatting, and cultural or regional context. Maintain the same level of formality and emotional tone as the original message. Responses may be of any length, provided they effectively communicate the response to the original sender:"
     Status_Message := "Generating reply..."
-    ProcessRequest(ChatGPT_Prompt, Status_Message, Retry_Status)
+    API_Model := "gpt-4"
+    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
 FindActionItems(*) {
     ChatGPT_Prompt := "Find action items that needs to be done and present them in a list:"
     Status_Message := "Finding action items..."
-    ProcessRequest(ChatGPT_Prompt, Status_Message, Retry_Status)
+    API_Model := "gpt-3.5-turbo"
+    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
 TranslateToEnglish(*) {
     ChatGPT_Prompt := "Generate an English translation for the following text or paragraph, ensuring the translation accurately conveys the intended meaning or idea without excessive deviation. The translation should preserve the tone, style, and formatting of the original text:"
     Status_Message := "Translating to English..."
-    ProcessRequest(ChatGPT_Prompt, Status_Message, Retry_Status)
+    API_Model := "gpt-4"
+    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
 /*
@@ -139,7 +145,7 @@ Retry(*) {
     RetryButton.Enabled := 0
     CopyButton.Enabled := 0
     CopyButton.Text := "Copy"
-    ProcessRequest(Previous_ChatGPT_Prompt, Previous_Status_Message, Retry_Status)
+    ProcessRequest(Previous_ChatGPT_Prompt, Previous_Status_Message, Previous_API_Model, Retry_Status)
 }
 
 Copy(*) {
@@ -166,7 +172,7 @@ Connect to ChatGPT API and process request
 ====================================================
 */
 
-ProcessRequest(ChatGPT_Prompt, Status_Message, Retry_Status) {
+ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status) {
     if (Retry_Status != "Retry") {
         A_Clipboard := ""
         Send "^c"
@@ -181,6 +187,7 @@ ProcessRequest(ChatGPT_Prompt, Status_Message, Retry_Status) {
         ChatGPT_Prompt := RegExReplace(ChatGPT_Prompt, "`r", "") ; Remove carriage returns
         global Previous_ChatGPT_Prompt := ChatGPT_Prompt
         global Previous_Status_Message := Status_Message
+        global Previous_API_Model := API_Model
         global Response_Window_Status
     }
 

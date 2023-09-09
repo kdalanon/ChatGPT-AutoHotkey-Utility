@@ -58,7 +58,7 @@ Function_To_Execute_When_Selected(*) {
 
 ### APIs
 
-You can edit the APIs used for each prompt by changing the `API_Model` under each prompt.
+You can edit the API used for each prompt by changing the `API_Model` under each prompt.
 
 ![76IxQa4](https://github.com/kdalanon/ChatGPT-AutoHotkey-Utility/assets/123705491/7bd23815-78d8-4629-b69b-7fcea3be5f28)
 

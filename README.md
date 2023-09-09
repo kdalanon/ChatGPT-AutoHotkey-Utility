@@ -4,9 +4,9 @@
 
 An AutoHotkey script that uses the ChatGPT API to process selected text.
 
-![image](https://github.com/kdalanon/ChatGPT-AutoHotkey-Utility/assets/123705491/d8387e7f-48b6-4e2e-892a-b79bf5c7f4fe)
+![image](https://github.com/kdalanon/ChatGPT-AutoHotkey-Utility/assets/123705491/e5076d79-26ad-4680-83ee-032a6a805d40)
 
-![image](https://github.com/kdalanon/ChatGPT-AutoHotkey-Utility/assets/123705491/65a6739c-1008-48ba-b048-35df129a852c)
+![image](https://github.com/kdalanon/ChatGPT-AutoHotkey-Utility/assets/123705491/3b1349c8-619f-4cf9-b82f-2289845a4b71)
 
 ## How to use
 

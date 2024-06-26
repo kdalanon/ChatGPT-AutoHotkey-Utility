@@ -2,7 +2,11 @@
 #SingleInstance
 #Include "_jxon.ahk"
 Persistent
-
+IB := InputBox("Please enter your API key.", "API Key", "")
+if IB.Result = "Cancel" {
+    MsgBox "You have to enter your API key."
+    ExitApp
+}
 /*
 ====================================================
 Script Tray Menu
@@ -47,7 +51,7 @@ Variables
 ====================================================
 */
 
-API_Key := "Your_API_Key_Here"
+API_Key := IB.Value
 API_URL := "https://api.openai.com/v1/chat/completions"
 Status_Message := ""
 Response_Window_Status := "Closed"

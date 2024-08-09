@@ -347,7 +347,7 @@ WM_MOUSEHOVER(*) {
 
 LoadingCursor() {
     MouseGetPos ,,, &MousePosition
-    if (MousePosition = "Edit1") {
+    if (MousePosition = "Intermediate D3D Window1") {
         Cursor := DllCall("LoadCursor", "uint", 0, "uint", 32514) ; Loading cursor
         DllCall("SetCursor", "UPtr", Cursor)
     }

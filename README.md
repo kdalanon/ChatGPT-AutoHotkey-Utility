@@ -4,9 +4,9 @@
 
 An AutoHotkey script that uses the ChatGPT API to process selected text.
 
-![image](https://github.com/kdalanon/ChatGPT-AutoHotkey-Utility/assets/123705491/e5076d79-26ad-4680-83ee-032a6a805d40)
+![image](https://github.com/user-attachments/assets/1d7038cf-6907-4287-9450-88e5e687d00a)
 
-![image](https://github.com/kdalanon/ChatGPT-AutoHotkey-Utility/assets/123705491/3b1349c8-619f-4cf9-b82f-2289845a4b71)
+![image](https://github.com/user-attachments/assets/25eb6e4b-977f-4249-9701-8506dae0d764)
 
 ## How to use
 
@@ -61,16 +61,21 @@ Function_To_Execute_When_Selected(*) {
 
 You can edit the API used for each prompt by changing the `API_Model` under each prompt. Visit [this page](https://platform.openai.com/docs/models) to explore a selection of available API models.
 
-![76IxQa4](https://github.com/kdalanon/ChatGPT-AutoHotkey-Utility/assets/123705491/7bd23815-78d8-4629-b69b-7fcea3be5f28)
+![API_Model](https://github.com/user-attachments/assets/23c1035d-2351-4389-b961-42111e92844d)
 
-### Hotkey
+### Hotkeys
 
-You can change the activation hotkey under Hotkey. See [here](https://www.autohotkey.com/docs/v2/KeyList.htm) for the list of possible hotkeys.
+You can change the hotkeys under Hotkeys. See [here](https://www.autohotkey.com/docs/v2/KeyList.htm) for the list of possible hotkeys.
 
-![image](https://github.com/kdalanon/ChatGPT-AutoHotkey-Utility/assets/123705491/da257ab3-05d0-4779-87a2-0a2ba6270255)
+To suspend the script, press `Capslock` & the `backtick key` (`)
+
+To close the GUI, press `Esc`
+
+![Hotkeys](https://github.com/user-attachments/assets/015086ca-0c19-4fe7-bc16-d6c77cb48de3)
 
 ## Credits
 
 - [AutoHotkey-JSON](https://github.com/cocobelgica/AutoHotkey-JSON) library
 - [ai-tools-ahk](https://github.com/ecornell/ai-tools-ahk) for the inspiration
 - [Icons8](https://icons8.com/icon/kTuxVYRKeKEY/chatgpt) for the icon
+- [WebView2](https://www.the-automator.com/downloads/webview2-example-files-display-modern-websites-with-autohotkey-v2/) to convert ChatGPT's Markdown replies into HTML

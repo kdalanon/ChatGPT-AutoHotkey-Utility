@@ -1,6 +1,7 @@
-#Requires AutoHotkey v2.0.2
+#Requires AutoHotkey 2.0
 #SingleInstance
 #Include "_jxon.ahk"
+#Include lib\WebView2.ahk
 Persistent
 
 /*
@@ -9,7 +10,7 @@ Script Tray Menu
 ====================================================
 */
 
-TraySetIcon("Icon.ico")
+TraySetIcon("IconOn.ico")
 A_TrayMenu.Delete
 A_TrayMenu.Add("&Debug", Debug)
 A_TrayMenu.Add("&Reload Script", ReloadScript)
@@ -30,7 +31,37 @@ Exit(*) {
 
 /*
 ====================================================
-Dark mode menu
+Initialize Suspend GUI
+====================================================
+*/
+
+ScriptSuspendStatus := Gui()
+ScriptSuspendStatus.Add("Text", "cWhite", "ChatGPT AutoHotkey Utility Suspended")
+ScriptSuspendStatus.BackColor := "0x7F00FF" ; Violet
+ScriptSuspendStatus.Opt("-Caption +Owner -SysMenu +AlwaysOnTop")
+
+/*
+====================================================
+Toggle Suspend
+====================================================
+*/
+
+Toggle_Suspend(*) {
+	Suspend -1
+	if (A_IsSuspended) {
+		TraySetIcon("IconOff.ico",, 1)
+		A_IconTip := "ChatGPT AutoHotkey Utility - Suspended (Press CapsLock + backtick (``) to unsuspend)"
+		ScriptSuspendStatus.Show("AutoSize x885 y35 NA")
+	} else {
+		TraySetIcon("IconOn.ico")
+		A_IconTip := "ChatGPT AutoHotkey Utility"
+		ScriptSuspendStatus.Hide()
+	}
+}
+
+/*
+====================================================
+Dark mode tray menu
 ====================================================
 */
 
@@ -61,60 +92,67 @@ Menus and ChatGPT prompts
 
 MenuPopup := Menu()
 MenuPopup.Add("&1 - Rephrase", Rephrase)
-MenuPopup.Add("&2 - Summarize", Summarize)
-MenuPopup.Add("&3 - Explain", Explain)
-MenuPopup.Add("&4 - Expand", Expand)
-MenuPopup.Add()
-MenuPopup.Add("&5 - Generate reply", GenerateReply)
+MenuPopup.Add("&2 - Reply", Reply)
+MenuPopup.Add("&3 - Answer", Answer)
+MenuPopup.Add("&4 - Translate to English", TranslateToEnglish)
+MenuPopup.Add("&5 - Follow instructions", FollowInstructions)
 MenuPopup.Add("&6 - Find action items", FindActionItems)
-MenuPopup.Add("&7 - Translate to English", TranslateToEnglish)
+MenuPopup.Add("&7 - Define", Define)
+MenuPopup.Add("&8 - Opinion", Opinion)
 
 Rephrase(*) {
-    ChatGPT_Prompt := "Rephrase the following text or paragraph to ensure clarity, conciseness, and a natural flow. The revision should preserve the tone, style, and formatting of the original text. Additionally, correct any grammar and spelling errors you come across:"
+    ChatGPT_Prompt := "Rephrase the following text or paragraph to ensure clarity, conciseness, and a natural flow. The revision should preserve the tone, style, and formatting of the original text. If possible, split it into paragraphs to improve readability. Additionally, correct any grammar and spelling errors you come across:"
     Status_Message := "Rephrasing..."
-    API_Model := "gpt-4"
+    API_Model := "gpt-4o"
     ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
-Summarize(*) {
-    ChatGPT_Prompt := "Summarize the following:"
-    Status_Message := "Summarizing..."
-    API_Model := "gpt-4"
+Answer(*) {
+    ChatGPT_Prompt := "Answer the following:"
+    Status_Message := "Answering..."
+    API_Model := "gpt-4o-mini"
     ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
-Explain(*) {
-    ChatGPT_Prompt := "Explain the following:"
-    Status_Message := "Explaining..."
-    API_Model := "gpt-3.5-turbo"
-    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
-}
-
-Expand(*) {
-    ChatGPT_Prompt := "Considering the original tone, style, and formatting, please help me express the following idea in a clearer and more articulate way. The style of the message could be formal, informal, casual, empathetic, assertive, or persuasive, depending on the context of the original message. The text should be divided into paragraphs for readability. No specific language complexities need to be avoided and the focus should be equally distributed throughout the message. There's no set minimum or maximum length. Here's what I'm trying to say:"
-    Status_Message := "Expanding..."
-    API_Model := "gpt-4"
-    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
-}
-
-GenerateReply(*) {
-    ChatGPT_Prompt := "Craft a response to any given message. The response should adhere to the original sender's tone, style, formatting, and cultural or regional context. Maintain the same level of formality and emotional tone as the original message. Responses may be of any length, provided they effectively communicate the response to the original sender:"
-    Status_Message := "Generating reply..."
-    API_Model := "gpt-4"
+FollowInstructions(*) {
+    ChatGPT_Prompt := "Follow the instructions:"
+    Status_Message := "Following the instructions..."
+    API_Model := "gpt-4o"
     ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
 FindActionItems(*) {
     ChatGPT_Prompt := "Find action items that needs to be done and present them in a list:"
     Status_Message := "Finding action items..."
-    API_Model := "gpt-3.5-turbo"
+    API_Model := "gpt-4o-mini"
     ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
 TranslateToEnglish(*) {
-    ChatGPT_Prompt := "Generate an English translation for the following text or paragraph, ensuring the translation accurately conveys the intended meaning or idea without excessive deviation. The translation should preserve the tone, style, and formatting of the original text:"
+    ChatGPT_Prompt := "Generate an English translation for the following text or paragraph, ensuring the translation accurately conveys the intended meaning or idea without excessive deviation. The translation should preserve the tone, style, and formatting of the original text. If possible, split it into paragraphs to improve readability. Additionally, correct any grammar and spelling errors you come across:"
     Status_Message := "Translating to English..."
-    API_Model := "gpt-4"
+    API_Model := "gpt-4o"
+    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
+}
+
+Reply(*) {
+    ChatGPT_Prompt := "Reply to the following message:"
+    Status_Message := "Replying..."
+    API_Model := "gpt-4o-mini"
+    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
+}
+
+Define(*) {
+    ChatGPT_Prompt := "Define the following:"
+    Status_Message := "Defining..."
+    API_Model := "gpt-4o"
+    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
+}
+
+Opinion(*) {
+    ChatGPT_Prompt := "What is your opinion on this:"
+    Status_Message := "Thinking..."
+    API_Model := "gpt-4o-mini"
     ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
@@ -125,14 +163,20 @@ Create Response Window
 */
 
 Response_Window := Gui("-Caption", "Response")
-Response_Window.BackColor := "0x333333"
-Response_Window.SetFont("s13 cWhite", "Georgia")
-Response := Response_Window.Add("Edit", "r20 ReadOnly w600 Wrap Background333333", Status_Message)
+Response_Window.BackColor := "0x212529"
+Response_Window.SetFont("s13 cWhite", "Bookerly")
+Placeholder := Response_Window.Add("Text", "x+20 h580 w580")
 RetryButton := Response_Window.Add("Button", "x190 Disabled", "Retry")
 RetryButton.OnEvent("Click", Retry)
 CopyButton := Response_Window.Add("Button", "x+30 w80 Disabled", "Copy")
 CopyButton.OnEvent("Click", Copy)
 Response_Window.Add("Button", "x+30", "Close").OnEvent("Click", Close)
+Response_Window.Show("AutoSize Center")
+WebView := WebView2.create(Placeholder.Hwnd)
+HTML_Preview := 'file:///' A_LineFile '\..\markdown.html'
+If WinActive("ahk_exe AutoHotkey64.exe" && "Response") {
+    Response_Window.Hide
+}
 
 /*
 ====================================================
@@ -149,7 +193,7 @@ Retry(*) {
 }
 
 Copy(*) {
-    A_Clipboard := Response.Value
+    A_Clipboard := Response
     CopyButton.Enabled := 0
     CopyButton.Text := "Copied!"
 
@@ -164,6 +208,8 @@ Close(*) {
     HTTP_Request.Abort
     Response_Window.Hide
     global Response_Window_Status := "Closed"
+    global Response := ""
+    UpdateContent()
 }
 
 /*
@@ -181,10 +227,11 @@ ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status) {
             return
         }
         CopiedText := A_Clipboard
-        ChatGPT_Prompt := ChatGPT_Prompt "`n`n" CopiedText
+        ChatGPT_Prompt :=  ChatGPT_Prompt "`n`n"  "`"" CopiedText "`""
         ChatGPT_Prompt := RegExReplace(ChatGPT_Prompt, '(\\|")+', '\$1') ; Clean back spaces and quotes
         ChatGPT_Prompt := RegExReplace(ChatGPT_Prompt, "`n", "\n") ; Clean newlines
         ChatGPT_Prompt := RegExReplace(ChatGPT_Prompt, "`r", "") ; Remove carriage returns
+        ChatGPT_Prompt := RegExReplace(ChatGPT_Prompt, "	", " ") ; Remove tabs
         global Previous_ChatGPT_Prompt := ChatGPT_Prompt
         global Previous_Status_Message := Status_Message
         global Previous_API_Model := API_Model
@@ -192,13 +239,14 @@ ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status) {
     }
 
     OnMessage 0x200, WM_MOUSEHOVER
-    Response.Value := Status_Message
+    Response := Status_Message
+    UpdateContent()
     if (Response_Window_Status = "Closed") {
         Response_Window.Show("AutoSize Center")
         Response_Window_Status := "Open"
         RetryButton.Enabled := 0
         CopyButton.Enabled := 0
-    }    
+    }
     DllCall("SetFocus", "Ptr", 0)
 
     global HTTP_Request := ComObject("WinHttp.WinHttpRequest.5.1")
@@ -217,14 +265,14 @@ ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status) {
     try {
         if (HTTP_Request.status == 200) {
             SafeArray := HTTP_Request.responseBody
-	    pData := NumGet(ComObjValue(SafeArray) + 8 + A_PtrSize, 'Ptr')
-	    length := SafeArray.MaxIndex() + 1
-	    JSON_Response := StrGet(pData, length, 'UTF-8')
+            pData := NumGet(ComObjValue(SafeArray) + 8 + A_PtrSize, 'Ptr')
+            length := SafeArray.MaxIndex() + 1
+            JSON_Response := StrGet(pData, length, 'UTF-8')
             var := Jxon_Load(&JSON_Response)
             JSON_Response := var.Get("choices")[1].Get("message").Get("content")
             RetryButton.Enabled := 1
             CopyButton.Enabled := 1
-            Response.Value := JSON_Response
+            global Response := JSON_Response
 
             SetTimer LoadingCursor, 0
             OnMessage 0x200, WM_MOUSEHOVER, 0
@@ -236,7 +284,7 @@ ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status) {
         } else {
             RetryButton.Enabled := 1
             CopyButton.Enabled := 1
-            Response.Value := "Status " HTTP_Request.status " " HTTP_Request.responseText
+            Response := "Status " HTTP_Request.status " " HTTP_Request.responseText
 
             SetTimer LoadingCursor, 0
             OnMessage 0x200, WM_MOUSEHOVER, 0
@@ -246,7 +294,39 @@ ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status) {
             Response_Window.Flash()
             DllCall("SetFocus", "Ptr", 0)
         }
+        UpdateContent()
     }
+}
+
+/*
+====================================================
+Update content of GUI
+====================================================
+*/
+
+UpdateContent(*) {
+    content := StrReplace(Response, "\", "\\")
+    content := StrReplace(content, "``", "\``")
+    script_content := "var textcontent = ``" content "``"
+    render_script := '
+    (
+        document.addEventListener("DOMContentLoaded", () => {
+            const md = markdownit({ html: true })
+                .use(texmath, {
+                    engine: katex,
+                    delimiters: "dollars",
+                    katexOptions: {
+                        macros: {
+                            "\\RR": "\\mathbb{R}"
+                        } 
+                    }
+                });
+            out.innerHTML = md.render(textcontent);
+        });
+        )'
+WebView.CoreWebView2.Navigate(HTML_Preview)
+WebView.CoreWebView2.ExecuteScript(script_content, 0)
+WebView.CoreWebView2.ExecuteScript(render_script, 0)
 }
 
 /*
@@ -275,8 +355,21 @@ LoadingCursor() {
 
 /*
 ====================================================
-Hotkey
+Hotkeys
 ====================================================
 */
 
 `::MenuPopup.Show()
+
+#HotIf WinActive("ahk_exe AutoHotkey64.exe" && "Response")
+~Esc::Close()
+
+#HotIf
+
+#SuspendExempt
+CapsLock & `:: {
+    KeyWait "CapsLock", "L"
+    KeyWait "``", "L"
+    SetCapsLockState "Off"
+    Toggle_Suspend(A_IsSuspended)
+}

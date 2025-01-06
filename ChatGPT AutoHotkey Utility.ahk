@@ -359,17 +359,16 @@ Hotkeys
 ====================================================
 */
 
-`::MenuPopup.Show()
+\::MenuPopup.Show()
 
 #HotIf WinActive("ahk_exe AutoHotkey64.exe" && "Response")
 ~Esc::Close()
-
 #HotIf
 
 #SuspendExempt
-CapsLock & `:: {
+CapsLock & \:: {
     KeyWait "CapsLock", "L"
-    KeyWait "``", "L"
+    KeyWait "\", "L"
     SetCapsLockState "Off"
     Toggle_Suspend(A_IsSuspended)
 }

@@ -78,7 +78,7 @@ Variables
 ====================================================
 */
 
-API_Key := "Your_API_Key_Here"
+API_Key := "..."
 API_URL := "https://api.openai.com/v1/chat/completions"
 Status_Message := ""
 Response_Window_Status := "Closed"
@@ -99,6 +99,8 @@ MenuPopup.Add("&5 - Follow instructions", FollowInstructions)
 MenuPopup.Add("&6 - Find action items", FindActionItems)
 MenuPopup.Add("&7 - Define", Define)
 MenuPopup.Add("&8 - Opinion", Opinion)
+MenuPopup.Add("&9 - Custom Prompt", CustomPrompt)
+
 
 Rephrase(*) {
     ChatGPT_Prompt := "Rephrase the following text or paragraph to ensure clarity, conciseness, and a natural flow. The revision should preserve the tone, style, and formatting of the original text. If possible, split it into paragraphs to improve readability. Additionally, correct any grammar and spelling errors you come across:"
@@ -110,7 +112,7 @@ Rephrase(*) {
 Answer(*) {
     ChatGPT_Prompt := "Answer the following:"
     Status_Message := "Answering..."
-    API_Model := "gpt-4o-mini"
+    API_Model := "gpt-4o"
     ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
@@ -124,7 +126,7 @@ FollowInstructions(*) {
 FindActionItems(*) {
     ChatGPT_Prompt := "Find action items that needs to be done and present them in a list:"
     Status_Message := "Finding action items..."
-    API_Model := "gpt-4o-mini"
+    API_Model := "gpt-4o"
     ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
@@ -138,7 +140,7 @@ TranslateToEnglish(*) {
 Reply(*) {
     ChatGPT_Prompt := "Reply to the following message:"
     Status_Message := "Replying..."
-    API_Model := "gpt-4o-mini"
+    API_Model := "gpt-4o"
     ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
@@ -152,9 +154,49 @@ Define(*) {
 Opinion(*) {
     ChatGPT_Prompt := "What is your opinion on this:"
     Status_Message := "Thinking..."
-    API_Model := "gpt-4o-mini"
+    API_Model := "gpt-4o"
     ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
 }
+
+CustomPrompt(*) {
+    global CustomPromptEdit ; Declare globally for access in SubmitCustomPrompt
+    
+    ; Create the GUI with window title styles
+    CustomPromptGUI := Gui("-Caption +AlwaysOnTop", "Custom Prompt")
+    CustomPromptGUI.BackColor := "0x212529" ; Dark background for consistency
+    CustomPromptGUI.SetFont("s13 cWhite", "Bookerly") ; White font for window title
+    
+    ; Window Title Text
+    CustomPromptGUI.Add("Text", "xm ym w400", "Enter your custom prompt:")
+    
+    ; Set a different font for the input box
+    CustomPromptGUI.SetFont("s13 cBlack", "Bookerly") ; Black font for input field
+    CustomPromptEdit := CustomPromptGUI.Add("Edit", "xm w400 r5") ; Edit box with dark text
+    
+    ; Buttons (use white font for consistency)
+    CustomPromptGUI.SetFont("s11 cWhite", "Bookerly")
+    SubmitButton := CustomPromptGUI.Add("Button", "xm w80", "Submit")
+    CancelButton := CustomPromptGUI.Add("Button", "x+10 w80", "Cancel")
+    
+    ; Button Events
+    SubmitButton.OnEvent("Click", (*) => SubmitCustomPrompt(CustomPromptGUI))
+    CancelButton.OnEvent("Click", (*) => CustomPromptGUI.Destroy())
+    
+    ; Show GUI
+    CustomPromptGUI.Show("AutoSize Center")
+}
+
+SubmitCustomPrompt(CustomPromptGUI) {
+    global CustomPromptEdit ; Access the global variable
+    global ChatGPT_Prompt := CustomPromptEdit.Text
+    global Status_Message := "Processing Custom Prompt..."
+    global API_Model := "gpt-4o"
+    global Retry_Status := ""
+    CustomPromptGUI.Destroy()
+    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
+}
+
+
 
 /*
 ====================================================
@@ -347,11 +389,14 @@ WM_MOUSEHOVER(*) {
 
 LoadingCursor() {
     MouseGetPos ,,, &MousePosition
-    if (MousePosition = "Intermediate D3D Window1") {
+    if (MousePosition = "Edit1") {
         Cursor := DllCall("LoadCursor", "uint", 0, "uint", 32514) ; Loading cursor
         DllCall("SetCursor", "UPtr", Cursor)
     }
 }
+
+
+
 
 /*
 ====================================================
@@ -359,17 +404,17 @@ Hotkeys
 ====================================================
 */
 
-`::MenuPopup.Show()
+\::MenuPopup.Show()
 
 #HotIf WinActive("ahk_exe AutoHotkey64.exe" && "Response")
 ~Esc::Close()
-
 #HotIf
 
 #SuspendExempt
-CapsLock & `:: {
+CapsLock & \:: {
     KeyWait "CapsLock", "L"
-    KeyWait "``", "L"
+    KeyWait "\", "L"
     SetCapsLockState "Off"
     Toggle_Suspend(A_IsSuspended)
 }
+

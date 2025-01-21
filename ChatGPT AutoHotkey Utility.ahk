@@ -101,59 +101,59 @@ MenuPopup.Add("&7 - Define", Define)
 MenuPopup.Add("&8 - Opinion", Opinion)
 
 Rephrase(*) {
-    ChatGPT_Prompt := "Rephrase the following text or paragraph to ensure clarity, conciseness, and a natural flow. The revision should preserve the tone, style, and formatting of the original text. If possible, split it into paragraphs to improve readability. Additionally, correct any grammar and spelling errors you come across:"
+    Developer_Prompt := "Rephrase the following text or paragraph to ensure clarity, conciseness, and a natural flow. The revision should preserve the tone, style, and formatting of the original text. If possible, split it into paragraphs to improve readability. Additionally, correct any grammar and spelling errors you come across:"
     Status_Message := "Rephrasing..."
     API_Model := "gpt-4o"
-    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
+    ProcessRequest(Developer_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
 Answer(*) {
-    ChatGPT_Prompt := "Answer the following:"
+    Developer_Prompt := "Answer the following:"
     Status_Message := "Answering..."
     API_Model := "gpt-4o-mini"
-    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
+    ProcessRequest(Developer_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
 FollowInstructions(*) {
-    ChatGPT_Prompt := "Follow the instructions:"
+    Developer_Prompt := "Follow the instructions:"
     Status_Message := "Following the instructions..."
     API_Model := "gpt-4o"
-    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
+    ProcessRequest(Developer_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
 FindActionItems(*) {
-    ChatGPT_Prompt := "Find action items that needs to be done and present them in a list:"
+    Developer_Prompt := "Find action items that needs to be done and present them in a list:"
     Status_Message := "Finding action items..."
     API_Model := "gpt-4o-mini"
-    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
+    ProcessRequest(Developer_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
 TranslateToEnglish(*) {
-    ChatGPT_Prompt := "Generate an English translation for the following text or paragraph, ensuring the translation accurately conveys the intended meaning or idea without excessive deviation. The translation should preserve the tone, style, and formatting of the original text. If possible, split it into paragraphs to improve readability. Additionally, correct any grammar and spelling errors you come across:"
+    Developer_Prompt := "Generate an English translation for the following text or paragraph, ensuring the translation accurately conveys the intended meaning or idea without excessive deviation. The translation should preserve the tone, style, and formatting of the original text. If possible, split it into paragraphs to improve readability. Additionally, correct any grammar and spelling errors you come across:"
     Status_Message := "Translating to English..."
     API_Model := "gpt-4o"
-    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
+    ProcessRequest(Developer_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
 Reply(*) {
-    ChatGPT_Prompt := "Reply to the following message:"
+    Developer_Prompt := "Reply to the following message:"
     Status_Message := "Replying..."
     API_Model := "gpt-4o-mini"
-    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
+    ProcessRequest(Developer_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
 Define(*) {
-    ChatGPT_Prompt := "Define the following:"
+    Developer_Prompt := "Define the following:"
     Status_Message := "Defining..."
     API_Model := "gpt-4o"
-    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
+    ProcessRequest(Developer_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
 Opinion(*) {
-    ChatGPT_Prompt := "What is your opinion on this:"
+    Developer_Prompt := "What is your opinion on this:"
     Status_Message := "Thinking..."
     API_Model := "gpt-4o-mini"
-    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
+    ProcessRequest(Developer_Prompt, Status_Message, API_Model, Retry_Status)
 }
 
 /*
@@ -189,7 +189,7 @@ Retry(*) {
     RetryButton.Enabled := 0
     CopyButton.Enabled := 0
     CopyButton.Text := "Copy"
-    ProcessRequest(Previous_ChatGPT_Prompt, Previous_Status_Message, Previous_API_Model, Retry_Status)
+    ProcessRequest(Previous_Developer_Prompt, Previous_Status_Message, Previous_API_Model, Retry_Status)
 }
 
 Copy(*) {
@@ -205,7 +205,16 @@ Copy(*) {
 }
 
 Close(*) {
-    HTTP_Request.Abort
+    global cURL_PID
+    if (IsSet(cURL_PID) && cURL_PID > 0 && ProcessExist(cURL_PID)) {
+        try {
+            ProcessClose(cURL_PID)  ; Terminates the cURL process
+        } catch {
+            ; Process might have already exited; ignore errors
+        }
+        FileDelete(TempJSONFile)
+        cURL_PID := 0  ; Reset the PID
+    }
     Response_Window.Hide
     global Response_Window_Status := "Closed"
     global Response := ""
@@ -218,7 +227,7 @@ Connect to ChatGPT API and process request
 ====================================================
 */
 
-ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status) {
+ProcessRequest(Developer_Prompt, Status_Message, API_Model, Retry_Status) {
     if (Retry_Status != "Retry") {
         A_Clipboard := ""
         Send "^c"
@@ -226,16 +235,7 @@ ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status) {
             MsgBox "The attempt to copy text onto the clipboard failed."
             return
         }
-        CopiedText := A_Clipboard
-        ChatGPT_Prompt :=  ChatGPT_Prompt "`n`n"  "`"" CopiedText "`""
-        ChatGPT_Prompt := RegExReplace(ChatGPT_Prompt, '(\\|")+', '\$1') ; Clean back spaces and quotes
-        ChatGPT_Prompt := RegExReplace(ChatGPT_Prompt, "`n", "\n") ; Clean newlines
-        ChatGPT_Prompt := RegExReplace(ChatGPT_Prompt, "`r", "") ; Remove carriage returns
-        ChatGPT_Prompt := RegExReplace(ChatGPT_Prompt, "	", " ") ; Remove tabs
-        global Previous_ChatGPT_Prompt := ChatGPT_Prompt
-        global Previous_Status_Message := Status_Message
-        global Previous_API_Model := API_Model
-        global Response_Window_Status
+        global CopiedText := A_Clipboard
     }
 
     OnMessage 0x200, WM_MOUSEHOVER
@@ -249,26 +249,71 @@ ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status) {
     }
     DllCall("SetFocus", "Ptr", 0)
 
-    global HTTP_Request := ComObject("WinHttp.WinHttpRequest.5.1")
-    HTTP_Request.open("POST", API_URL, true)
-    HTTP_Request.SetRequestHeader("Content-Type", "application/json")
-    HTTP_Request.SetRequestHeader("Authorization", "Bearer " API_Key)
-    Messages := '{ "role": "user", "content": "' ChatGPT_Prompt '" }'
+    ; Build the JSON Request; Split the request into Developer and Copied text if the API_model is one of OpenAI's GPT models; otherwise combine them
+    if InStr(API_Model, "o1") {
+        ; Combine Developer_Prompt and CopiedText into User_Prompt, then clean them up
+        User_Prompt := Developer_Prompt "`n`n"  "`"" CopiedText "`""
+        User_Prompt := CleanText(User_Prompt)
+        Messages := '{ "role": "user", "content": "' User_Prompt '" }'
+    } else if InStr(API_Model, "gpt") {
+        ; Clean up Developer_Prompt
+        Developer_Prompt := CleanText(Developer_Prompt)
+        ; Clean up CopiedText
+        CopiedText := CleanText(CopiedText)
+        Messages := '{ "role": "developer", "content": "' Developer_Prompt '" }, { "role": "user", "content": "' CopiedText '" }'
+    }
     JSON_Request := '{ "model": "' API_Model '", "messages": [' Messages '] }'
-    HTTP_Request.SetTimeouts(60000, 60000, 60000, 60000)
-    HTTP_Request.Send(JSON_Request)
+
+    ; Make these variables global so that Retry(*) and Close(*) functions can access them
+    global Previous_Developer_Prompt := Developer_Prompt
+    global Previous_Status_Message := Status_Message
+    global Previous_API_Model := API_Model
+    global Response_Window_Status
+
+    ; Write JSON_Request to a temporary file with UTF-8-RAW encoding. Make it global so that the Close(*) function can access it
+    global TempJSONFile := A_Temp "\JSON_Request_" A_TickCount ".json"
+    FileOpen(TempJSONFile, "w", "UTF-8-RAW").Write(JSON_Request)
+
+    ; We need to redirect output to a temp file
+    TempOutputFile := A_Temp "\cURL_Output_" A_TickCount ".txt"
+
+    ; Build the cURL command without using cmd.exe
+    cURL_Command := 'curl.exe -s -X POST "' API_URL '" -H "Content-Type: application/json" -H "Authorization: Bearer ' API_Key '" -d @' TempJSONFile ' -o "' TempOutputFile '"'
+
+    ; Start the loading cursor
     SetTimer LoadingCursor, 1
     if WinExist("Response") {
-        WinActivate "Response"
+        WinActivate("Response")
     }
-    HTTP_Request.WaitForResponse
+    
+    ; Run the cURL command asynchronously and store the PID
+    Run(cURL_Command, , "Hide", &cURL_PID)
+
+    ; Make the variable cURL_PID global so that the Close(*) function can access it
+    global cURL_PID
+
+    ; Wait for the process to complete or be aborted
+    while (ProcessExist(cURL_PID)) {
+        Sleep 250  ; Allows the script to process GUI events
+    }
+    
+    ; Read the output after the process has completed
+    if FileExist(TempOutputFile) {
+        JSON_Response := FileOpen(TempOutputFile, "r", "UTF-8").Read()
+        ; Clean up temporary files
+        FileDelete(TempOutputFile)
+        FileDelete(TempJSONFile)
+    } else {
+        JSON_Response := "Error: Output file not found or cURL execution failed."
+    }
+    
+    ; Reset the PID as the process has completed
+    cURL_PID := 0
+
+    ; Now process the response
     try {
-        if (HTTP_Request.status == 200) {
-            SafeArray := HTTP_Request.responseBody
-            pData := NumGet(ComObjValue(SafeArray) + 8 + A_PtrSize, 'Ptr')
-            length := SafeArray.MaxIndex() + 1
-            JSON_Response := StrGet(pData, length, 'UTF-8')
-            var := Jxon_Load(&JSON_Response)
+        var := Jxon_Load(&JSON_Response)
+        if IsObject(var) && var.Has("choices") {
             JSON_Response := var.Get("choices")[1].Get("message").Get("content")
             RetryButton.Enabled := 1
             CopyButton.Enabled := 1
@@ -284,7 +329,7 @@ ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status) {
         } else {
             RetryButton.Enabled := 1
             CopyButton.Enabled := 1
-            Response := "Status " HTTP_Request.status " " HTTP_Request.responseText
+            Response := "Error: " JSON_Response
 
             SetTimer LoadingCursor, 0
             OnMessage 0x200, WM_MOUSEHOVER, 0
@@ -294,8 +339,34 @@ ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status) {
             Response_Window.Flash()
             DllCall("SetFocus", "Ptr", 0)
         }
-        UpdateContent()
+    } catch {
+        RetryButton.Enabled := 1
+        CopyButton.Enabled := 1
+        Response := "Error parsing response: " JSON_Response
+        
+        SetTimer LoadingCursor, 0
+        OnMessage 0x200, WM_MOUSEHOVER, 0
+        Cursor := DllCall("LoadCursor", "uint", 0, "uint", 32512) ; Arrow cursor
+        DllCall("SetCursor", "UPtr", Cursor)
+
+        Response_Window.Flash()
+        DllCall("SetFocus", "Ptr", 0)
     }
+    UpdateContent()
+}
+
+/*
+====================================================
+Cleans text
+====================================================
+*/
+
+CleanText(text) {
+    text := RegExReplace(text, '(\\|")+', '\$1') ; Clean back spaces and quotes
+    text := RegExReplace(text, "`n", "\n") ; Clean newlines
+    text := RegExReplace(text, "`r", "") ; Remove carriage returns
+    text := RegExReplace(text, "	", " ") ; Remove tabs
+    return text
 }
 
 /*
@@ -347,7 +418,7 @@ WM_MOUSEHOVER(*) {
 
 LoadingCursor() {
     MouseGetPos ,,, &MousePosition
-    if (MousePosition = "Intermediate D3D Window1") {
+    if (MousePosition = "Edit1") {
         Cursor := DllCall("LoadCursor", "uint", 0, "uint", 32514) ; Loading cursor
         DllCall("SetCursor", "UPtr", Cursor)
     }

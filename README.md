@@ -5,7 +5,8 @@
 > - Auto-Paste functionality
 > - Multi-model support that utilizes [OpenRouter.ai](https://openrouter.ai/), not just ChatGPT
 > - Sending message to multiple models at the same time
-> - Web search  
+> - Web search
+> - And more!
 > 
 > For ongoing development, bug fixes, and the best experience, please switch to the new app: [LLM AutoHotkey Assistant](https://github.com/kdalanon/LLM-AutoHotkey-Assistant).
 

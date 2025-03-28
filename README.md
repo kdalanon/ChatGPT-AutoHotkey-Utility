@@ -1,5 +1,5 @@
-> [!CAUTION]
-> I will be archiving this repository sometime next month as I've created a significantly improved version of this application, rebuilt from scratch.  It offers the same core features, but with the addition of the following:
+> [!CAUTION] 
+> Please switch to the new and improved [LLM AutoHotkey Assistant](https://github.com/kdalanon/LLM-AutoHotkey-Assistant) as it offers the following features:
 > - Type custom prompts manually
 > - Interactive Response Window - Chat, Copy, Retry, and see Chat History
 > - Auto-Paste functionality
@@ -7,8 +7,6 @@
 > - Sending message to multiple models at the same time
 > - Web search
 > - And more!
-> 
-> For ongoing development, bug fixes, and the best experience, please switch to the new app: [LLM AutoHotkey Assistant](https://github.com/kdalanon/LLM-AutoHotkey-Assistant).
 
 # ChatGPT-AutoHotkey-Utility
 
@@ -59,35 +57,3 @@ MenuPopup.Add()
 ### Prompt
 
 You can add a prompt using this code:
-
-```AutoHotkey
-Function_To_Execute_When_Selected(*) {
-    ChatGPT_Prompt := "Your prompt here:"
-    Status_Message := "Status message that will show while processing the request"
-    API_Model := "gpt-4" ; or API_Model := "gpt-3.5-turbo"
-    ProcessRequest(ChatGPT_Prompt, Status_Message, API_Model, Retry_Status)
-}
-```
-
-### APIs
-
-You can edit the API used for each prompt by changing the `API_Model` under each prompt. Visit [this page](https://platform.openai.com/docs/models) to explore a selection of available API models.
-
-![API_Model](https://github.com/user-attachments/assets/23c1035d-2351-4389-b961-42111e92844d)
-
-### Hotkeys
-
-You can change the hotkeys under Hotkeys. See [here](https://www.autohotkey.com/docs/v2/KeyList.htm) for the list of possible hotkeys.
-
-To suspend the script, press `Capslock` & the `backtick key` (`)
-
-To close the GUI, press `Esc`
-
-![Hotkeys](https://github.com/user-attachments/assets/015086ca-0c19-4fe7-bc16-d6c77cb48de3)
-
-## Credits
-
-- [AutoHotkey-JSON](https://github.com/cocobelgica/AutoHotkey-JSON) library
-- [ai-tools-ahk](https://github.com/ecornell/ai-tools-ahk) for the inspiration
-- [Icons8](https://icons8.com/icon/kTuxVYRKeKEY/chatgpt) for the icon
-- [WebView2](https://www.the-automator.com/downloads/webview2-example-files-display-modern-websites-with-autohotkey-v2/) to convert ChatGPT's Markdown replies into HTML
